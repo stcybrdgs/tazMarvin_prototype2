@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      body {
+        background: rgb(36, 36, 36);
+        padding: 60px;
+      }
+      .player-outer-wrapper {
+        /*   position: relative; */
+        height: 400px;
+        width: 300px;
+        /* border: 1px solid orange; */
+
+        text-align: center;
+      }
+
+      .headroom {
+        height: 40px;
+        background: gray;
+        /* position: relative; */
+      }
+
+      .player-inner-wrapper {
+        border: 1px solid orange;
+        height: calc(100% - 40px);
+        border-radius: 15px;
+        color: white;
+        position: relative;
+      }
+
+      .album-art-wrapper {
+        /* position: relative; */
+        height: 210px;
+        /* background: green; */
+        /* text-align: center; */
+      }
+
+      img {
+        height: 250px;
+        width: 250px;
+        /* object-fit: cover; */
+        border-radius: 15px;
+        position: relative;
+        top: -40px;
+      }
+
+      .album-info {
+        border: 1px solid red;
+        /* position: relative; */
+        /* top: -40px; */
+      }
+
+      .controls {
+        /* background: lightblue; */
+        /* position: relative; */
+        /* top: -40px; */
+        border: 1px solid white;
+        padding: 10px 0px;
+      }
+    </style>
+    <title>Teest</title>
+  </head>
+  <body>
+    <div class="player-outer-wrapper">
+      <div class="headroom"></div>
+      <div class="player-inner-wrapper">
+        <div class="album-art-wrapper">
+          <img
+            src="https://images.unsplash.com/photo-1467480613746-552533b68555?q=80&w=1930&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            alt=""
+          />
+        </div>
+
+        <div class="album-info">
+          <div>Song Name</div>
+          <div>Album Name</div>
+        </div>
+        <div class="controls">
+          <div>Progress Bar</div>
+          <div>Buttons</div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+

@@ -1,0 +1,400 @@
+#main-wrapper {
+  .section {
+    // border: 1px solid white;
+    //margin: 40px 0px;
+  }
+
+  h2 {
+    text-align: center;
+  }
+
+  #banner {
+    //margin: 0;
+    height: 6cqmax;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 10px;
+
+    #banner-logo {
+      /* stuff */
+      font-size: 1.8em;
+    }
+
+    #banner-nav-btns {
+      // display: flex;
+      // justify-content: center;
+
+      .banner-nav-btn {
+        //border-radius: 5px;
+        margin: 0 2px;
+        padding: 8px;
+        font-size: 1.4em;
+        /* width: 60px; */
+        border: 0;
+        //opacity: 0.8;
+        color: whitesmoke;
+        background: transparent;
+        opacity: 0.8;
+        border-bottom: 4px solid transparent;
+
+        //transition: border-bottom 0.2s;
+      }
+
+      .banner-nav-btn:hover {
+        //opacity: 1;
+        cursor: pointer;
+        //color: #252525;
+        border-bottom-color: #d5bb78; //rgb(183, 234, 250);
+      }
+
+      .banner-nav-btn:active {
+        opacity: 0.6;
+      }
+    }
+  }
+
+  #hero {
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      object-fit: contain;
+    }
+  }
+
+  #thoughts {
+    position: relative;
+    height: 500px;
+    display: flex;
+
+    #thoughts-image {
+      width: 40%;
+      min-width: 200px;
+      overflow: hidden;
+
+      img {
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+
+    .thoughts-text {
+      margin-right: 40px;
+      width: 60%;
+      min-width: 200px;
+      padding: 15px 24px 30px 24px;
+      overflow: scroll;
+      scrollbar-color: #8295aa whitesmoke; //#919191;
+      height: 100%;
+      color: #3b3b3b;
+      background: whitesmoke;
+      //padding-top: 10px;
+      box-sizing: border-box;
+
+      h4 {
+        color: #3c6b9b;
+      }
+    }
+
+    #thoughts-btn {
+      position: absolute;
+      height: 100%;
+      right: 0;
+      background: #d5bb78;
+      color: #3c6b9b;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-top-right-radius: 30px;
+      border-bottom-right-radius: 30px;
+      width: 40px;
+      transition: width 0.1s;
+
+      i {
+        font-size: 0.9em;
+      }
+    }
+
+    #thoughts-btn:hover {
+      opacity: 1;
+      width: 54px;
+      cursor: pointer;
+    }
+
+    #thoughts-btn:hover i {
+      font-size: 1.2em;
+    }
+
+    #thoughts-btn:active i {
+      opacity: 0.7;
+    }
+  }
+
+  #radio-wrapper {
+    background: black;
+
+    .radio-marquee {
+      font-family: 'IBM Plex Mono', monospace, sans-serif;
+      font-size: 0.9em;
+      font-weight: 600;
+      color: rgb(192, 189, 119);
+      display: block;
+      position: relative;
+      top: -20px;
+      background-image: linear-gradient(
+          rgba(110, 112, 110, 0.7) 0.1em,
+          transparent 0.1em
+        ),
+        linear-gradient(
+          90deg,
+          rgba(140, 244, 140, 0.4) 0.1em,
+          transparent 0.1em
+        );
+      background-size: 0.3em 0.3em;
+    }
+
+    #radio {
+      display: flex;
+      justify-content: center;
+
+      .player-wrapper {
+        border: 1px solid white;
+        margin-right: 20px;
+        width: 40%;
+        display: flex;
+        justify-content: right;
+
+        .player {
+          border: 1px solid orange;
+          width: 300px;
+
+          padding: 20px;
+          display: flex;
+          flex-direction: column;
+
+          .album-art-wrapper {
+            border: 1px solid green;
+            text-align: center;
+
+            img {
+              border-radius: 15px;
+              height: 250px;
+              width: 250px;
+            }
+          }
+
+          .album-info {
+            border: 1px solid red;
+            padding: 10px 0px;
+            text-align: center;
+          }
+
+          .controls {
+            border: 1px solid white;
+            padding: 10px 0;
+            text-align: center;
+          }
+        }
+      }
+
+      .song-menu {
+        border: 1px solid white;
+        width: 60%;
+        text-align: left;
+        padding: 0 20px;
+      }
+    }
+
+    #carousel-wrapper {
+      text-align: center;
+      //height: 200px;
+      padding: 20px 0;
+
+      .carousel {
+        height: 350px;
+        background: rgb(60, 74, 65);
+      }
+    }
+  }
+
+  #merch-wrapper {
+    background: whitesmoke;
+    color: #252525;
+
+    #merch {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+
+      .merch-card {
+        border: 1px solid #252525;
+        margin: 20px;
+        padding: 4px;
+        width: 220px;
+        height: 220px;
+        border-radius: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .merch-card-shim {
+        margin: 20px;
+        padding: 4px;
+        width: 220px;
+        height: 0px;
+      }
+    }
+  }
+  /* stuff */
+
+  #reachme {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 60px;
+
+    #reachme-signup {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      justify-content: center;
+      border: 1px solid white;
+      border-radius: 10px;
+      padding: 0px 40px 30px 40px;
+      background: #202020;
+      margin: 0px 10px 0px 20px;
+      width: 43%;
+      border-color: rgb(100, 99, 99);
+
+      input {
+        padding: 8px;
+        color: whitesmoke;
+        //margin: 0 10%;
+      }
+      .signup-btn-wrapper {
+        text-align: right;
+
+        button {
+          position: relative;
+          width: 30%;
+          padding: 8px;
+          border-radius: 5px;
+          margin-top: 18px;
+          background: #3d6b9b;
+          border: 0;
+        }
+
+        button:hover {
+          cursor: pointer;
+          background: #4e89c8;
+        }
+
+        button:active {
+          opacity: 0.8;
+        }
+      }
+    }
+
+    #reachme-signup:hover {
+      border-color: white;
+    }
+
+    #reachme-contact {
+      text-align: center;
+      width: 50%;
+      margin: 0px 20px 0px 10px;
+      border-radius: 10px;
+      padding: 0px 0px 30px 0px;
+
+      .contact-field {
+        width: 80%;
+        padding: 8px;
+        margin-top: 20px;
+        color: whitesmoke;
+      }
+
+      .name-input {
+        margin: 0;
+      }
+
+      textarea {
+        min-height: 100px;
+        max-height: 300px;
+        resize: vertical;
+      }
+
+      .contact-me-btn-wrapper {
+        text-align: right;
+        margin: 0 8%;
+
+        button {
+          position: relative;
+          width: 30%;
+          padding: 8px;
+          border-radius: 5px;
+          margin-top: 10px;
+          background: #3d6b9b;
+          border: 0;
+        }
+
+        button:hover {
+          cursor: pointer;
+          background: #4e89c8;
+        }
+
+        button:active {
+          opacity: 0.8;
+        }
+      }
+    }
+  }
+
+  #footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-top: 1px solid rgb(90, 90, 90);
+    height: 140px;
+
+    .footer-social {
+      display: flex;
+      position: relative;
+      justify-content: center;
+      align-items: center;
+      margin: 20px;
+
+      .fa-brands-wrapper {
+        height: 64px;
+        width: 64px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .fa-brands {
+        font-size: 1.6em;
+        color: whitesmoke;
+        opacity: 0.8;
+        transition: opacity 0.1s;
+      }
+
+      .fa-brands:hover {
+        cursor: pointer;
+        opacity: 1;
+        font-size: 1.8em;
+      }
+
+      .fa-brands:active {
+        opacity: 0.6;
+      }
+    }
+
+    .footer-info {
+      font-size: 0.8em;
+    }
+  }
+}
+
