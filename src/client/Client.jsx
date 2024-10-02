@@ -105,16 +105,87 @@ const Client = () => {
               </div>
 
               <div className='controls'>
-                <div>Progress Bar</div>
-                <div>Buttons</div>
+                {/* Progress Bar */}
+                <div className='progress-bar'>
+                  <div className='progress' />
+                  <div className='duration-wrapper'>
+                    <span id='current-time' />
+                    <span id='duration' />
+                  </div>
+                </div>
+
+                <audio src='' controls></audio>
+
+                {/* Control Buttons */}
+                <div className='control-buttons'>
+                  <i
+                    className='fa-solid fa-shuffle'
+                    title='Shuffle'
+                    onClick={shuffleSongs}
+                  ></i>
+
+                  <div className='main-control-buttons'>
+                    <i
+                      className='fas fa-backward'
+                      id='prev'
+                      title='Previous'
+                      onClick={prevSong}
+                    ></i>
+                    <i
+                      className='fas fa-play main-button'
+                      id='play'
+                      title='Play'
+                      onClick={playSong}
+                    ></i>
+                    {/* <i
+                      className='fas fa-pause main-button'
+                      id='pause'
+                      title='Pause'
+                      onClick={pauseSong}
+                    ></i> */}
+                    <i
+                      className='fas fa-forward'
+                      id='next'
+                      title='Next'
+                      onClick={nextSong}
+                    ></i>
+                  </div>
+                  <i
+                    className='fa-solid fa-repeat'
+                    title='Repeat'
+                    onClick={repeatSong}
+                  ></i>
+                </div>
+
+                <div className='volume-slider'>volume -----------</div>
               </div>
             </div>
           </div>
 
-          {/* Song Menu */}
-          <div className='song-menu'>
-            <div>song 1</div>
-            <div>song 2</div>
+          <div className='menu-wrapper'>
+            <div className='radio-menu'>
+              <div className='entry'>
+                <div className='song'>
+                  <i className='fas fa-play' title='Play'></i>
+                  <span className='song-name'>Song one</span>
+                </div>
+                <span className='details'>
+                  <span className='length'>5:38</span>
+                  <i className='fa-solid fa-ellipsis song-menu'></i>
+                </span>
+              </div>
+
+              <div className='entry'>
+                <div className='song'>
+                  <i className='fas fa-play' title='Play'></i>
+                  <span className='song-name'>Song one</span>
+                </div>
+                <span className='details'>
+                  <span className='length'>5:38</span>
+                  <i className='fa-solid fa-ellipsis song-menu'></i>
+                </span>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -135,6 +206,10 @@ const Client = () => {
               </div>
             )
           })}
+          {/* TO DO: Fix this with a function */}
+          <div className='merch-card-shim' />
+          <div className='merch-card-shim' />
+          <div className='merch-card-shim' />
           <div className='merch-card-shim' />
           <div className='merch-card-shim' />
         </div>

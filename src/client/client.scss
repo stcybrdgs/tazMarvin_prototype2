@@ -167,8 +167,9 @@
 
         .player {
           border: 1px solid orange;
-          width: 300px;
+          width: 400px;
 
+          min-width: 360px;
           padding: 20px;
           display: flex;
           flex-direction: column;
@@ -179,8 +180,8 @@
 
             img {
               border-radius: 15px;
-              height: 250px;
-              width: 250px;
+              height: 300px;
+              width: 300px;
             }
           }
 
@@ -194,15 +195,117 @@
             border: 1px solid white;
             padding: 10px 0;
             text-align: center;
+
+            .progress-bar {
+              background: #444443;
+              border-radius: 5px;
+              cursor: pointer;
+              //margin: 44px 0px;
+              height: 10px;
+              width: 100%;
+
+              .progress {
+                background: #c7ab48;
+                border-radius: 5px;
+                height: 100%;
+                width: 50%;
+                transition: width 0.1s linear;
+              }
+
+              .duration-wrapper {
+                position: relative;
+                top: -34px;
+                display: flex;
+                justify-content: space-between;
+              }
+            }
+
+            audio {
+              display: none;
+            }
+
+            .control-buttons {
+              margin: 20px 10%;
+
+              display: flex;
+              justify-content: space-between;
+
+              i {
+                font-size: 1.2em;
+              }
+
+              .main-control-buttons {
+                // border: 1px solid white;
+                width: 60%;
+                display: flex;
+                justify-content: space-evenly;
+              }
+            }
+
+            .volume-slider {
+              color: blue;
+            }
           }
         }
       }
 
-      .song-menu {
-        border: 1px solid white;
+      .menu-wrapper {
         width: 60%;
-        text-align: left;
-        padding: 0 20px;
+
+        .radio-menu {
+          border-top: 1px solid white;
+          text-align: left;
+          color: whitesmoke;
+          //width: 80%;
+          //padding: 0 20px;
+
+          .entry {
+            padding: 10px 20px;
+            //border: 1px solid blue;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid whitesmoke;
+            font-size: 1em;
+
+            .song {
+              //border: 1px solid white;
+              .fa-play {
+                position: relative;
+                top: 2px;
+                //font-size: 1em;
+              }
+
+              .song-name {
+                margin-left: 20px;
+              }
+            }
+
+            .details {
+              .length {
+                margin-right: 20px;
+              }
+
+              .song-menu {
+                //border: 1px solid rgb(60, 74, 65);
+
+                padding: 4px 5px;
+                border-radius: 20px;
+                background: transparent;
+                transition: background 0.1s;
+              }
+
+              .song-menu:hover {
+                background: whitesmoke;
+                color: black;
+                cursor: pointer;
+              }
+            }
+          }
+
+          .entry:hover {
+            background: rgb(60, 74, 65);
+          }
+        }
       }
     }
 
