@@ -1,3 +1,4 @@
+import { useEffect, useState, useRef } from 'react'
 import './client.scss'
 
 //lightbulb, comment, music, headphones
@@ -29,14 +30,87 @@ Lorem ipsum odor amet, consectetuer adipiscing elit. Euismod suspendisse arcu ph
 const albumArtUrl =
   'https://images.unsplash.com/photo-1467480613746-552533b68555?q=80&w=1930&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
 
-const playSong = () => {}
-const pauseSong = () => {}
-const shuffleSongs = () => {}
-const repeatSong = () => {}
-const prevSong = () => {}
-const nextSong = () => {}
+// const playSong = () => {
+//   console.log('play')
+//   audioRef.play()
+// }
+const pauseSong = () => {
+  console.log('pause')
+}
+const shuffleSongs = () => {
+  console.log('shuffle')
+}
+const repeatSong = () => {
+  console.log('repeat')
+}
+const prevSong = () => {
+  console.log('prev')
+}
+const nextSong = () => {
+  console.log('next')
+}
 
+const callApiForDefaultSongData = () => {
+  return songsArray[0]
+}
+
+// const initializePlayer = (songData) => {
+//   console.log(songData)
+// }
+
+const songsArray = [
+  {
+    songId: '1',
+    album: 'The White HSK Workbook',
+    title: 'HSK 3 Workbook - Part 1',
+    artist: '王朋和李友',
+    duration: '36:16',
+    releaseDate: '01/01/2001',
+    fileUrl: 'src/assets/chin_1.mp3',
+    imgUrl: 'images/chin_1.jpeg',
+  },
+  {
+    songId: '2',
+    album: 'The White HSK Workbook',
+    title: 'HSK 3 Workbook - Part 1',
+    artist: '王朋和李友',
+    duration: '36:05',
+    releaseDate: '01/01/2001',
+    fileUrl: 'src/assets/chin_2.mp3',
+    imgUrl: 'images/chin_2.jpeg',
+  },
+]
 const Client = () => {
+  const [selectedSong, setSelectedSong] = useState({})
+  const [songIsPlaying, setSongIsPlaying] = useState(false)
+
+  const audioRef = useRef(null)
+  const audioPlayBtnRef = useRef(null)
+
+  const togglePlaySong = () => {
+    if (songIsPlaying) {
+      console.log('pause')
+      audioRef.current.pause()
+    } else {
+      console.log('play')
+      audioRef.current.play()
+    }
+    setSongIsPlaying(!songIsPlaying)
+    console.log('audio ref:', audioRef.current)
+  }
+
+  useEffect(() => {
+    const defaultSong = callApiForDefaultSongData()
+    setSelectedSong(defaultSong)
+    //initializePlayer(defaultSong)
+
+    if (audioRef.current) {
+      console.log('ref:', audioRef.current)
+      console.log('defult song: ', defaultSong)
+      audioRef.src = defaultSong.fileUrl
+    }
+  }, [])
+
   return (
     <div id='main-wrapper'>
       {/* Banner */}
@@ -64,7 +138,7 @@ const Client = () => {
 
       {/* thoughts */}
       <div id='thoughts-wrapper' className='section'>
-        <h2>Thought Street</h2>
+        <h2>Thoughts</h2>
         <div id='thoughts'>
           <div id='thoughts-image'>
             <img
@@ -73,7 +147,7 @@ const Client = () => {
             />
           </div>
           <div className='thoughts-text'>
-            <h4>Recent Thoughts...</h4>
+            <h4>New Tunes, October 7</h4>
             <span>{thoughtText}</span>
           </div>
           <div id='thoughts-btn'>
@@ -83,7 +157,7 @@ const Client = () => {
       </div>
 
       {/* radio */}
-      <div id='radio-wrapper' className='section'>
+      <div id='music-wrapper' className='section'>
         <h2>Taz Radio</h2>
         {/* Marquee */}
         <marquee behavior='scroll' direction='left' className='radio-marquee'>
@@ -93,101 +167,102 @@ const Client = () => {
 
         <div id='radio'>
           {/* Player */}
-          <div className='player-wrapper'>
-            <div className='player'>
-              <div className='album-art-wrapper'>
-                <img id='myImage' src={albumArtUrl} alt='' />
-              </div>
+          {/* <div className='player-wrapper'> */}
+          <div className='player'>
+            <div className='album-art-wrapper'>
+              <img id='myImage' src={albumArtUrl} alt='' />
+            </div>
 
-              <div className='album-info'>
-                <div>Song Name</div>
-                <div>Album Name</div>
-              </div>
+            <div className='album-info'>
+              <div>Song Name</div>
+              <div>Album Name</div>
+            </div>
 
-              <div className='controls'>
-                {/* Progress Bar */}
-                <div className='progress-bar'>
-                  <div className='progress' />
-                  <div className='duration-wrapper'>
-                    <span id='current-time' />
-                    <span id='duration' />
-                  </div>
+            <div className='controls'>
+              {/* Progress Bar */}
+              <div className='progress-bar'>
+                <div className='progress' />
+                <div className='duration-wrapper'>
+                  <span id='current-time' />
+                  <span id='duration' />
                 </div>
+              </div>
 
-                <audio src='' controls></audio>
+              <audio src={selectedSong.fileUrl} controls ref={audioRef}></audio>
 
-                {/* Control Buttons */}
-                <div className='control-buttons'>
+              {/* Control Buttons */}
+              <div className='control-buttons'>
+                <i
+                  className='fa-solid fa-shuffle'
+                  title='Shuffle'
+                  onClick={shuffleSongs}
+                ></i>
+
+                <div className='main-control-buttons'>
                   <i
-                    className='fa-solid fa-shuffle'
-                    title='Shuffle'
-                    onClick={shuffleSongs}
+                    className='fas fa-backward'
+                    id='prev'
+                    title='Previous'
+                    onClick={prevSong}
                   ></i>
-
-                  <div className='main-control-buttons'>
+                  <div className='play-button-wrapper'>
                     <i
-                      className='fas fa-backward'
-                      id='prev'
-                      title='Previous'
-                      onClick={prevSong}
-                    ></i>
-                    <i
-                      className='fas fa-play main-button'
-                      id='play'
-                      title='Play'
-                      onClick={playSong}
-                    ></i>
-                    {/* <i
-                      className='fas fa-pause main-button'
-                      id='pause'
-                      title='Pause'
-                      onClick={pauseSong}
-                    ></i> */}
-                    <i
-                      className='fas fa-forward'
-                      id='next'
-                      title='Next'
-                      onClick={nextSong}
+                      className={`fas ${
+                        songIsPlaying ? 'fa-pause' : 'fa-play'
+                      }`}
+                      id={songIsPlaying ? 'pause' : 'play'}
+                      title={songIsPlaying ? 'Pause' : 'Play'}
+                      onClick={togglePlaySong}
+                      ref={audioPlayBtnRef}
                     ></i>
                   </div>
                   <i
-                    className='fa-solid fa-repeat'
-                    title='Repeat'
-                    onClick={repeatSong}
+                    className='fas fa-forward'
+                    id='next'
+                    title='Next'
+                    onClick={nextSong}
                   ></i>
                 </div>
-
-                <div className='volume-slider'>volume -----------</div>
+                <i
+                  className='fa-solid fa-repeat'
+                  title='Repeat'
+                  onClick={repeatSong}
+                ></i>
               </div>
+
+              <div className='volume-slider'>volume -----------</div>
             </div>
           </div>
+          {/* </div> */}
 
-          <div className='menu-wrapper'>
-            <div className='radio-menu'>
-              <div className='entry'>
-                <div className='song'>
-                  <i className='fas fa-play' title='Play'></i>
-                  <span className='song-name'>Song one</span>
-                </div>
-                <span className='details'>
-                  <span className='length'>5:38</span>
-                  <i className='fa-solid fa-ellipsis song-menu'></i>
+          {/* <div className='menu-wrapper'> */}
+          <div className='radio-menu'>
+            <div className='entry'>
+              <div className='song'>
+                <i className='fas fa-play' title='Play'></i>
+                <span className='song-name'>
+                  Song one with a really long name
                 </span>
               </div>
+              <span className='details'>
+                <span className='song-length'>5:38</span>
+                <i className='fa-solid fa-ellipsis song-menu'></i>
+              </span>
+            </div>
 
-              <div className='entry'>
-                <div className='song'>
-                  <i className='fas fa-play' title='Play'></i>
-                  <span className='song-name'>Song one</span>
-                </div>
-                <span className='details'>
-                  <span className='length'>5:38</span>
-                  <i className='fa-solid fa-ellipsis song-menu'></i>
-                </span>
+            <div className='entry'>
+              <div className='song'>
+                <i className='fas fa-play' title='Play'></i>
+                <span className='song-name'>Song one</span>
               </div>
+              <span className='details'>
+                <span className='song-length'>5:38</span>
+                <i className='fa-solid fa-ellipsis song-menu'></i>
+              </span>
             </div>
           </div>
         </div>
+        {/* </div> */}
 
         {/* Album Carousel */}
         <div id='carousel-wrapper' className='section'>
@@ -197,7 +272,7 @@ const Client = () => {
 
       {/* merch */}
       <div id='merch-wrapper' className='section'>
-        <h2>Merch House</h2>
+        <h2>Merch</h2>
         <div id='merch'>
           {merchItems.map((item, index) => {
             return (
