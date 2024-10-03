@@ -230,7 +230,7 @@
             margin: 0 5%;
             font-size: 1.2em;
             font-weight: 600;
-            letter-spacing: 1px;
+            //letter-spacing: 1px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -374,6 +374,10 @@
         color: whitesmoke;
         width: 50%;
         min-width: 360px;
+
+        .entry-is-selected {
+          background: #597676;
+        }
 
         .entry {
           padding: 10px 20px;

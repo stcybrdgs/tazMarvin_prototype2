@@ -28,50 +28,19 @@ Lorem ipsum odor amet, consectetuer adipiscing elit. Euismod suspendisse arcu ph
 Lorem ipsum odor amet, consectetuer adipiscing elit. Euismod suspendisse arcu pharetra fermentum fermentum molestie rhoncus metus. Amet ad tempor velit maecenas leo torquent. Nullam etiam aenean vivamus ad nisl. Sollicitudin ullamcorper egestas tincidunt adipiscing mollis egestas; donec habitasse ex. Vehicula sit interdum fusce sociosqu viverra. Litora varius feugiat ridiculus tortor neque malesuada dignissim.
 `
 
-const albumArtUrl =
-  'https://images.unsplash.com/photo-1467480613746-552533b68555?q=80&w=1930&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-
-const callApiForDefaultSongData = () => {
-  return songsArray[0]
-}
-
-const callApiForDefaultAlbumData = () => {
-  return albums[0]
-}
-
-// const initializePlayer = (songData) => {
-//   console.log(songData)
-// }
-
-const songsArray = [
-  {
-    songId: '1',
-    album: 'The White HSK Workbook',
-    title: 'HSK 3 Workbook - Part 1',
-    artist: '王朋和李友',
-    duration: '36:16',
-    releaseDate: '01/01/2001',
-    fileUrl: 'src/assets/chin_1.mp3',
-    imgUrl: 'images/chin_1.jpeg',
-  },
-  {
-    songId: '2',
-    album: 'The White HSK Workbook',
-    title: 'HSK 3 Workbook - Part 1',
-    artist: '王朋和李友',
-    duration: '36:05',
-    releaseDate: '01/01/2001',
-    fileUrl: 'src/assets/chin_2.mp3',
-    imgUrl: 'images/chin_2.jpeg',
-  },
-]
 const Client = () => {
   const [selectedSong, setSelectedSong] = useState({})
   const [songIsPlaying, setSongIsPlaying] = useState(false)
-  const [selectedAlbum, setSelectedAlbum] = useState([])
+  const [selectedAlbum, setSelectedAlbum] = useState({})
+  const [radioMenuSongs, setRadioMenuSongs] = useState([])
 
   const audioRef = useRef(null)
   const audioPlayBtnRef = useRef(null)
+
+  // API helpers
+  const callApiForDefaultAlbumData = () => {
+    return albums[0]
+  }
 
   // Player Control Functions
   const togglePlaySong = () => {
@@ -88,9 +57,32 @@ const Client = () => {
 
   const prevSong = () => {
     console.log('prev')
+    const currentIndex = selectedSong.track - 1
+    const prevIndex =
+      currentIndex === 0 ? radioMenuSongs.length - 1 : currentIndex - 1
+    const prevSong = radioMenuSongs[prevIndex]
+
+    setSelectedSong(prevSong)
+    loadSong(selectedSong)
+
+    if (songIsPlaying) {
+      audioRef.current.play()
+    }
   }
+
   const nextSong = () => {
-    console.log('next')
+    const currentIndex = selectedSong.track - 1
+    const nextIndex =
+      currentIndex === radioMenuSongs.length - 1 ? 0 : currentIndex + 1
+    const nextSong = radioMenuSongs[nextIndex]
+
+    // console.log('next', currentIndex, nextIndex, nextSong)
+    setSelectedSong(nextSong)
+    loadSong(selectedSong)
+
+    if (songIsPlaying) {
+      audioRef.current.play()
+    }
   }
 
   const shuffleSongs = () => {
@@ -99,22 +91,29 @@ const Client = () => {
   const repeatSong = () => {
     console.log('repeat')
   }
+  const loadSong = (song) => {
+    console.log('load song: ', song)
+    audioRef.src = song
+  }
 
   useEffect(() => {
-    const defaultAlbum = callApiForDefaultAlbumData()
-    const defaultSong = callApiForDefaultSongData()
-    setSelectedSong(defaultSong)
-    setSelectedAlbum(defaultAlbum)
-    //initializePlayer(defaultSong)
+    const selectedAlbum = callApiForDefaultAlbumData()
+    setSelectedAlbum(selectedAlbum)
+
+    const selectedSong = selectedAlbum.songs[0]
+    setSelectedSong(selectedSong)
+
+    const radioMenuSongs = selectedAlbum.songs
+    setRadioMenuSongs(radioMenuSongs)
 
     if (audioRef.current) {
-      console.log('ref:', audioRef.current)
-      console.log('defult song: ', defaultSong)
-      audioRef.src = defaultSong.fileUrl
+      loadSong(selectedSong.fileUrl)
     }
 
-    console.log('defaultAlbum: ', defaultAlbum)
+    console.log('selectedSong:', selectedSong)
   }, [])
+
+  // return <h2>Test</h2>
 
   return (
     <div id='main-wrapper'>
@@ -168,25 +167,25 @@ const Client = () => {
         <h2>Taz Radio</h2>
         {/* Marquee */}
         <marquee behavior='scroll' direction='left' className='radio-marquee'>
-          <span>4. &quot;Dandelion&quot; </span>
-          <span>&ndash;&nbsp;Dandelion (Taz Marvin Music, 2022)</span>
+          <span>
+            {selectedSong.track}. &quot;{selectedSong.name}&quot;{' '}
+          </span>
+          <span>
+            &ndash;&nbsp;{selectedSong.album} (Taz Marvin Music,{' '}
+            {selectedSong.released})
+          </span>
         </marquee>
 
         <div id='radio'>
           {/* Player */}
-          {/* <div className='player-wrapper'> */}
           <div className='player'>
             <div className='album-art-wrapper'>
-              <img id='myImage' src={albumArtUrl} alt='' />
+              <img id='myImage' src={selectedAlbum.artUrl} alt='' />
             </div>
 
             <div className='album-info'>
-              <div className='album-info-song'>
-                Song one with a really long name
-              </div>
-              <div className='album-info-album'>
-                Album with a really long Name by most standards
-              </div>
+              <div className='album-info-song'>{selectedSong.name}</div>
+              <div className='album-info-album'>{selectedSong.album}</div>
             </div>
 
             <div className='controls'>
@@ -243,36 +242,30 @@ const Client = () => {
               <div className='volume-slider'>volume -----------</div>
             </div>
           </div>
-          {/* </div> */}
 
-          {/* <div className='menu-wrapper'> */}
+          {/* Radio Menu */}
           <div className='radio-menu'>
-            <div className='entry'>
-              <div className='song'>
-                <i className='fas fa-play' title='Play'></i>
-                <span className='song-name'>
-                  Song one with a really long name
-                </span>
-              </div>
-              <span className='details'>
-                <span className='song-length'>5:38</span>
-                <i className='fa-solid fa-ellipsis song-menu'></i>
-              </span>
-            </div>
-
-            <div className='entry'>
-              <div className='song'>
-                <i className='fas fa-play' title='Play'></i>
-                <span className='song-name'>Song one</span>
-              </div>
-              <span className='details'>
-                <span className='song-length'>5:38</span>
-                <i className='fa-solid fa-ellipsis song-menu'></i>
-              </span>
-            </div>
+            {radioMenuSongs.map((song) => {
+              return (
+                <div
+                  key={song.id}
+                  className={`entry ${
+                    song.id === selectedSong.id && 'entry-is-selected'
+                  }`}
+                >
+                  <div className='song'>
+                    <i className='fas fa-play' title='Play'></i>
+                    <span className='song-name'>{song.name}</span>
+                  </div>
+                  <span className='details'>
+                    <span className='song-length'>{song.duration}</span>
+                    <i className='fa-solid fa-ellipsis song-menu'></i>
+                  </span>
+                </div>
+              )
+            })}
           </div>
         </div>
-        {/* </div> */}
 
         {/* Album Carousel */}
         <div id='carousel-wrapper' className='section'>
@@ -306,7 +299,7 @@ const Client = () => {
         <div id='reachme'>
           <div id='reachme-signup'>
             <h2>Sign Up</h2>
-            <p>Sign up to receive Taz's latest news and music!</p>
+            <p>Sign up to receive Taz&apos;s latest news and music!</p>
             <input type='text' placeholder='Email' />
             <div className='signup-btn-wrapper'>
               <button>Sign Up</button>
