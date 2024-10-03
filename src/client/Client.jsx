@@ -30,26 +30,6 @@ Lorem ipsum odor amet, consectetuer adipiscing elit. Euismod suspendisse arcu ph
 const albumArtUrl =
   'https://images.unsplash.com/photo-1467480613746-552533b68555?q=80&w=1930&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
 
-// const playSong = () => {
-//   console.log('play')
-//   audioRef.play()
-// }
-const pauseSong = () => {
-  console.log('pause')
-}
-const shuffleSongs = () => {
-  console.log('shuffle')
-}
-const repeatSong = () => {
-  console.log('repeat')
-}
-const prevSong = () => {
-  console.log('prev')
-}
-const nextSong = () => {
-  console.log('next')
-}
-
 const callApiForDefaultSongData = () => {
   return songsArray[0]
 }
@@ -87,6 +67,7 @@ const Client = () => {
   const audioRef = useRef(null)
   const audioPlayBtnRef = useRef(null)
 
+  // Player Control Functions
   const togglePlaySong = () => {
     if (songIsPlaying) {
       console.log('pause')
@@ -97,6 +78,19 @@ const Client = () => {
     }
     setSongIsPlaying(!songIsPlaying)
     console.log('audio ref:', audioRef.current)
+  }
+
+  const shuffleSongs = () => {
+    console.log('shuffle')
+  }
+  const repeatSong = () => {
+    console.log('repeat')
+  }
+  const prevSong = () => {
+    console.log('prev')
+  }
+  const nextSong = () => {
+    console.log('next')
   }
 
   useEffect(() => {
@@ -137,21 +131,23 @@ const Client = () => {
       </div>
 
       {/* thoughts */}
-      <div id='thoughts-wrapper' className='section'>
+      <div id='thought-cards-wrapper' className='section'>
         <h2>Thoughts</h2>
-        <div id='thoughts'>
-          <div id='thoughts-image'>
-            <img
-              src='https://images.unsplash.com/photo-1727459740748-a0004bd98ed6?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-              alt=''
-            />
-          </div>
-          <div className='thoughts-text'>
-            <h4>New Tunes, October 7</h4>
-            <span>{thoughtText}</span>
-          </div>
-          <div id='thoughts-btn'>
-            <i className='fa-solid fa-arrow-right' />
+        <div className='thought-cards'>
+          <div id='thought-card'>
+            <div id='thought-image'>
+              <img
+                src='https://images.unsplash.com/photo-1601758124277-f0086d5ab050?q=80&w=1210&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+                alt=''
+              />
+            </div>
+            <div className='thought-text'>
+              <h4>New Tunes, October 7</h4>
+              <span>{thoughtText}</span>
+            </div>
+            <div id='thought-btn'>
+              <i className='fa-solid fa-arrow-right' />
+            </div>
           </div>
         </div>
       </div>
@@ -174,8 +170,12 @@ const Client = () => {
             </div>
 
             <div className='album-info'>
-              <div>Song Name</div>
-              <div>Album Name</div>
+              <div className='album-info-song'>
+                Song one with a really long name
+              </div>
+              <div className='album-info-album'>
+                Album with a really long Name by most standards
+              </div>
             </div>
 
             <div className='controls'>
@@ -205,14 +205,13 @@ const Client = () => {
                     title='Previous'
                     onClick={prevSong}
                   ></i>
-                  <div className='play-button-wrapper'>
+                  <div className='play-button-wrapper' onClick={togglePlaySong}>
                     <i
                       className={`fas ${
                         songIsPlaying ? 'fa-pause' : 'fa-play'
                       }`}
                       id={songIsPlaying ? 'pause' : 'play'}
                       title={songIsPlaying ? 'Pause' : 'Play'}
-                      onClick={togglePlaySong}
                       ref={audioPlayBtnRef}
                     ></i>
                   </div>
