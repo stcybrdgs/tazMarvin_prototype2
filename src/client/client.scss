@@ -193,7 +193,7 @@
         //border: 1px solid whitesmoke; // orange;
         border-radius: 15px;
         width: 400px;
-        //min-width: 360px;
+        min-width: 360px;
         padding: 20px;
         display: flex;
         flex-direction: column;
@@ -222,7 +222,7 @@
 
         .album-info {
           // border: 1px solid red;
-          padding: 10px 0px;
+          padding: 4px 0px;
           text-align: center;
           //white-space: nowrap;
 
@@ -246,7 +246,7 @@
 
         .controls {
           // border: 1px solid white;
-          padding: 14px 0;
+          padding: 40px 0 12px 0;
           text-align: center;
 
           .progress-bar {
@@ -261,16 +261,26 @@
               background: #6ac5c8;
               border-radius: 5px;
               height: 100%;
-              width: 50%;
+              width: 0%;
               box-shadow: 1px 3px 10px 0px rgba(255, 255, 255, 0.6);
               transition: width 0.1s linear;
             }
 
             .duration-wrapper {
               position: relative;
-              top: -34px;
+              font-size: 0.8em;
+              position: relative;
+              top: -40px;
+              margin: 0 4px;
+              //color: #e2eeff;
               display: flex;
               justify-content: space-between;
+
+              #current-time {
+              }
+
+              #duration {
+              }
             }
           }
 
@@ -279,24 +289,23 @@
           }
 
           .control-buttons {
-            margin: 32px 12px;
+            margin: 38px 12px 28px 12px;
             display: flex;
             justify-content: space-between;
 
             i {
               font-size: 1.2em;
-              opacity: 0.6;
+              opacity: 0.5;
             }
 
             i:hover {
               cursor: pointer;
               opacity: 1;
-              color: white;
               text-shadow: 0 0 4px #fff;
             }
 
             i:active {
-              opacity: 0.7;
+              opacity: 0.6;
             }
 
             .fa-backward {
@@ -316,7 +325,7 @@
 
               .play-button-wrapper {
                 position: absolute;
-                top: -13px;
+                top: -12px;
                 border-radius: 30px;
                 border: 2px solid #d7d7d7;
                 background: #6b7c95;
@@ -345,7 +354,7 @@
               }
 
               .play-button-wrapper:active {
-                opacity: 0.7;
+                opacity: 0.6;
               }
 
               .play-button-wrapper:hover i.fa-play {
@@ -353,6 +362,7 @@
                 text-shadow: 0 0 4px #fff;
                 opacity: 1;
               }
+
               .play-button-wrapper:hover i.fa-pause {
                 color: white;
                 text-shadow: 0 0 4px #fff;
@@ -363,6 +373,9 @@
 
           .volume-slider {
             color: blue;
+            font-size: 0.9em;
+            position: relative;
+            top: 6px;
           }
         }
       }
@@ -380,11 +393,11 @@
         }
 
         .entry {
-          padding: 10px 20px;
+          padding: 8px 20px;
           display: flex;
           justify-content: space-between;
           border-bottom: 1px solid whitesmoke;
-          font-size: 1em;
+          font-size: 0.9em;
 
           .song {
             overflow: hidden;
@@ -393,7 +406,7 @@
 
             .fa-play {
               position: relative;
-              top: 1px;
+              top: 0;
               opacity: 0.7;
             }
 
@@ -418,23 +431,24 @@
 
             .song-length {
               margin: 0 20px;
+              font-size: 0.9em;
             }
 
             .song-menu {
-              //border: 1px solid rgb(60, 74, 65);
-
-              padding: 4px 5px;
+              padding: 5px 7px 4px 7px;
+              position: relative;
+              top: 0px;
               border-radius: 20px;
+              opacity: 0.6;
               background: transparent;
               transition: background 0.1s;
-              opacity: 0.6;
             }
 
             .song-menu:hover {
               background: whitesmoke;
-              color: black;
+              color: #495857;
               cursor: pointer;
-              opacity: 1;
+              opacity: 0.8;
             }
 
             .song-menu:active {
