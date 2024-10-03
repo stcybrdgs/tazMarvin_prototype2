@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react'
 import './client.scss'
+import albums from '../data/albums.js'
 
 //lightbulb, comment, music, headphones
 const bannerNavIcons = ['fa-music', 'fa-blog', 'fa-shirt', 'fa-envelope']
@@ -34,6 +35,10 @@ const callApiForDefaultSongData = () => {
   return songsArray[0]
 }
 
+const callApiForDefaultAlbumData = () => {
+  return albums[0]
+}
+
 // const initializePlayer = (songData) => {
 //   console.log(songData)
 // }
@@ -63,6 +68,7 @@ const songsArray = [
 const Client = () => {
   const [selectedSong, setSelectedSong] = useState({})
   const [songIsPlaying, setSongIsPlaying] = useState(false)
+  const [selectedAlbum, setSelectedAlbum] = useState([])
 
   const audioRef = useRef(null)
   const audioPlayBtnRef = useRef(null)
@@ -80,12 +86,6 @@ const Client = () => {
     console.log('audio ref:', audioRef.current)
   }
 
-  const shuffleSongs = () => {
-    console.log('shuffle')
-  }
-  const repeatSong = () => {
-    console.log('repeat')
-  }
   const prevSong = () => {
     console.log('prev')
   }
@@ -93,9 +93,18 @@ const Client = () => {
     console.log('next')
   }
 
+  const shuffleSongs = () => {
+    console.log('shuffle')
+  }
+  const repeatSong = () => {
+    console.log('repeat')
+  }
+
   useEffect(() => {
+    const defaultAlbum = callApiForDefaultAlbumData()
     const defaultSong = callApiForDefaultSongData()
     setSelectedSong(defaultSong)
+    setSelectedAlbum(defaultAlbum)
     //initializePlayer(defaultSong)
 
     if (audioRef.current) {
@@ -103,6 +112,8 @@ const Client = () => {
       console.log('defult song: ', defaultSong)
       audioRef.src = defaultSong.fileUrl
     }
+
+    console.log('defaultAlbum: ', defaultAlbum)
   }, [])
 
   return (
