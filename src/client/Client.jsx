@@ -1,7 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState, useRef } from 'react'
+// import { CSSTransition } from 'react-transition-group'
 import './client.scss'
 import albums from '../data/albums.js'
+
+// import { useRenderCount } from "@uidotdev/usehooks";
+// const renderCount = useRenderCount();
+// const [count, setCount] = React.useState(0);
 
 //lightbulb, comment, music, headphones
 const bannerNavIcons = ['fa-music', 'fa-blog', 'fa-shirt', 'fa-envelope']
@@ -33,10 +38,11 @@ const Client = () => {
   const [selectedSong, setSelectedSong] = useState({})
   const [isPlaying, setIsPlaying] = useState(false)
   const [selectedAlbum, setSelectedAlbum] = useState({})
-  const [radioMenuSongs, setRadioMenuSongs] = useState([])
+  const [selectedAlbumSongs, setSelectedAlbumSongs] = useState([])
+  const [songQueue, setSongQueue] = useState([])
+  const [isShuffled, setIsShuffled] = useState(false)
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
-  const [isShuffled, setIsShuffled] = useState(false)
   const [isRepeated, setIsRepeated] = useState(false)
   const [progressBarWidth, setProgressBarWidth] = useState('0%')
 
@@ -74,26 +80,29 @@ const Client = () => {
 
   // Player Control Functions
   const handleAudioTimeUpdate = () => {
-    if (audioRef.current) {
-      console.log('handle Audio Time Update')
-      const currentTimeInMs = audioRef.current.currentTime
-      const durationInMs = audioRef.current.duration
-      const progressRatio =
-        currentTimeInMs === 0 ? 0 : currentTimeInMs / durationInMs
-
-      // set progress-bar width in the player ui
-      setProgressBarWidth(`${Math.round(progressRatio * 100)}%`)
-
-      // update current timestamp in player ui
-      const currentTime = getTimestamp(currentTimeInMs)
-      setCurrentTime(currentTime)
+    if (!audioRef.current) {
+      return
     }
+    //console.log('handle Audio Time Update')
+    const currentTimeInMs = audioRef.current.currentTime
+    const durationInMs = audioRef.current.duration
+    const progressRatio =
+      currentTimeInMs === 0 ? 0 : currentTimeInMs / durationInMs
+
+    // update player timestamp and progress bar to reflect current time
+    const updatedTime = getTimestamp(currentTimeInMs)
+    if (updatedTime === currentTime) {
+      return
+    }
+    setCurrentTime(updatedTime)
+    setProgressBarWidth(`${Math.round(progressRatio * 100)}%`)
+    console.log('set time')
   }
 
   const handleAudioLoadedMetadata = () => {
     if (audioRef.current) {
-      const currentTime = getTimestamp(audioRef.current.duration)
-      setDuration(currentTime)
+      const duration = getTimestamp(audioRef.current.duration)
+      setDuration(duration)
     }
   }
 
@@ -125,8 +134,8 @@ const Client = () => {
   const prevSong = () => {
     const currentIndex = selectedSong.track - 1
     const prevIndex =
-      currentIndex === 0 ? radioMenuSongs.length - 1 : currentIndex - 1
-    const prevSong = radioMenuSongs[prevIndex]
+      currentIndex === 0 ? songQueue.length - 1 : currentIndex - 1
+    const prevSong = songQueue[prevIndex]
 
     setSelectedSong(prevSong)
     loadSong(selectedSong)
@@ -135,16 +144,32 @@ const Client = () => {
   const nextSong = () => {
     const currentIndex = selectedSong.track - 1
     const nextIndex =
-      currentIndex === radioMenuSongs.length - 1 ? 0 : currentIndex + 1
-    const nextSong = radioMenuSongs[nextIndex]
+      currentIndex === songQueue.length - 1 ? 0 : currentIndex + 1
+    const nextSong = songQueue[nextIndex]
 
     setSelectedSong(nextSong)
     loadSong(nextSong)
   }
 
+  const shuffleArray = (array) => {
+    // shuffle with Fisher-Yates algorithm
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1))
+      ;[array[i], array[j]] = [array[j], array[i]]
+    }
+    return array
+  }
+
   const toggleShuffleSongs = () => {
-    console.log('shuffle')
-    setIsShuffled(!isShuffled)
+    const shuffleIsSelected = !isShuffled
+    if (shuffleIsSelected) {
+      const shuffledSongs = shuffleArray([...songQueue])
+      setSongQueue(shuffledSongs)
+    } else {
+      setSongQueue(selectedAlbumSongs)
+    }
+
+    setIsShuffled(shuffleIsSelected)
   }
 
   const repeatSong = () => {
@@ -182,17 +207,21 @@ const Client = () => {
   useEffect(() => {
     const selectedAlbum = callApiForDefaultAlbumData()
     const selectedSong = selectedAlbum.songs[0]
-    const radioMenuSongs = selectedAlbum.songs
+    const selectedAlbumSongs = selectedAlbum.songs
 
     setSelectedAlbum(selectedAlbum)
     setSelectedSong(selectedSong)
-    setRadioMenuSongs(radioMenuSongs)
+    setSelectedAlbumSongs(selectedAlbumSongs)
+    setSongQueue(selectedAlbumSongs)
 
     if (audioRef.current) {
       loadSong(selectedSong.fileUrl)
     }
   }, [])
 
+  useEffect(() => {
+    //console.log('use effect render')
+  })
   // return <h2>Test</h2>
 
   return (
@@ -278,6 +307,7 @@ const Client = () => {
                   max={duration}
                   style={playerStyles.progressBar}
                 />
+
                 <div className='duration-wrapper'>
                   <span id='current-time'>{currentTime}</span>
                   <span id='duration'>{duration}</span>
@@ -353,7 +383,7 @@ const Client = () => {
 
           {/* Radio Menu */}
           <div className='radio-menu'>
-            {radioMenuSongs.map((song) => {
+            {songQueue.map((song) => {
               return (
                 <div
                   key={song.id}

@@ -216,6 +216,7 @@
             border-radius: 15px;
             height: 300px;
             width: 300px;
+            object-fit: cover;
             box-shadow: 8px 8px 16px 0px rgba(255, 255, 255, 0.3); /* h v blur spread */
           }
         }
@@ -389,7 +390,7 @@
         min-width: 360px;
 
         .entry-is-selected {
-          background: #597676;
+          background: #69778a;
         }
 
         .entry {
@@ -435,9 +436,9 @@
             }
 
             .song-menu {
-              padding: 5px 7px 4px 7px;
+              padding: 6px 7px 4px 7px;
               position: relative;
-              top: 0px;
+              top: 1px;
               border-radius: 20px;
               opacity: 0.6;
               background: transparent;
@@ -458,7 +459,7 @@
         }
 
         .entry:hover {
-          background: #597676;
+          background: #69778a;
           cursor: default;
         }
       }
