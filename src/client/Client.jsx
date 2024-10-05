@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unknown-property */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState, useRef } from 'react'
 // import { CSSTransition } from 'react-transition-group'
@@ -34,9 +35,12 @@ Lorem ipsum odor amet, consectetuer adipiscing elit. Euismod suspendisse arcu ph
 Lorem ipsum odor amet, consectetuer adipiscing elit. Euismod suspendisse arcu pharetra fermentum fermentum molestie rhoncus metus. Amet ad tempor velit maecenas leo torquent. Nullam etiam aenean vivamus ad nisl. Sollicitudin ullamcorper egestas tincidunt adipiscing mollis egestas; donec habitasse ex. Vehicula sit interdum fusce sociosqu viverra. Litora varius feugiat ridiculus tortor neque malesuada dignissim.
 `
 
+// State variables
 const Client = () => {
   const [selectedSong, setSelectedSong] = useState({})
+  const [selectedSongMenuEntry, setSelectedSongMenuEntry] = useState({})
   const [isPlaying, setIsPlaying] = useState(false)
+  const [currentIndex, setCurrentIndex] = useState(0)
   const [selectedAlbum, setSelectedAlbum] = useState({})
   const [selectedAlbumSongs, setSelectedAlbumSongs] = useState([])
   const [songQueue, setSongQueue] = useState([])
@@ -45,6 +49,7 @@ const Client = () => {
   const [duration, setDuration] = useState(0)
   const [isRepeated, setIsRepeated] = useState(false)
   const [progressBarWidth, setProgressBarWidth] = useState('0%')
+  const [entryIsHovered, setEntryIsHovered] = useState('')
 
   const playerStyles = {
     progressBar: { width: progressBarWidth },
@@ -65,25 +70,14 @@ const Client = () => {
   // const audioPlayBtnRef = useRef(null)
   // const audioPauseBtnRef = useRef(null)
 
-  // get timestamp for progressbar
-  const getTimestamp = (time) => {
-    let minutes = Math.floor(time / 60)
-    let seconds = Math.floor(time % 60)
-    if (minutes < 10) {
-      minutes = `0${minutes}`
-    }
-    if (seconds < 10) {
-      seconds = `0${seconds}`
-    }
-    return `${minutes}:${seconds}`
-  }
-
-  // Player Control Functions
+  // Audio tag handlers
   const handleAudioTimeUpdate = () => {
+    // if there's no audio el, do nothing
     if (!audioRef.current) {
       return
     }
-    //console.log('handle Audio Time Update')
+
+    // calc how much of song duration has elapsed
     const currentTimeInMs = audioRef.current.currentTime
     const durationInMs = audioRef.current.duration
     const progressRatio =
@@ -91,12 +85,23 @@ const Client = () => {
 
     // update player timestamp and progress bar to reflect current time
     const updatedTime = getTimestamp(currentTimeInMs)
-    if (updatedTime === currentTime) {
+
+    // if timestamp has not changed, return
+    // (greatly reduces re-renders)
+    if (updatedTime === currentTime && updatedTime != duration) {
       return
     }
+
+    // else, update timestamp on player ui
     setCurrentTime(updatedTime)
+
+    // update progress bar based on coin toss to make it less clunky looking
+    // if (updatedTime === duration || Math.random() < 0.5) {
+    //   setProgressBarWidth(`${Math.round(progressRatio * 100)}%`)
+    // }
+
+    // update progress bar
     setProgressBarWidth(`${Math.round(progressRatio * 100)}%`)
-    console.log('set time')
   }
 
   const handleAudioLoadedMetadata = () => {
@@ -107,6 +112,14 @@ const Client = () => {
   }
 
   const handleAudioEnded = () => {
+    console.log('audio ended')
+
+    // if the next song is at the top of the queue,
+    // then do not continue playing unless
+    // the user enabled the repeat option
+    if (currentIndex === songQueue.length - 1 && !isRepeated) {
+      return
+    }
     nextSong()
   }
 
@@ -121,6 +134,7 @@ const Client = () => {
   //   console.log('time update')
   // }
 
+  // Player Control Functions
   const playSong = () => {
     audioRef.current.play()
     setIsPlaying(true)
@@ -140,19 +154,26 @@ const Client = () => {
     const prevSong = songQueue[prevIndex]
 
     setSelectedSong(prevSong)
-    loadSong(selectedSong)
+    setSelectedSongMenuEntry(prevSong)
+    loadSong(prevSong)
   }
 
   const nextSong = () => {
     const currentIndex = songQueue.findIndex(
       (song) => song.id === selectedSong.id
     )
+
     const nextIndex =
       currentIndex === songQueue.length - 1 ? 0 : currentIndex + 1
     const nextSong = songQueue[nextIndex]
 
     setSelectedSong(nextSong)
+    setSelectedSongMenuEntry(nextSong)
     loadSong(nextSong)
+
+    if (isPlaying) {
+      playSong()
+    }
   }
 
   const shuffleArray = (array) => {
@@ -182,12 +203,12 @@ const Client = () => {
   }
 
   const loadSong = (song) => {
+    console.log('load')
     audioRef.src = song
     handleAudioTimeUpdate()
     handleAudioLoadedMetadata()
   }
 
-  // Set song progress when user clicks on progress bar
   const setSongProgress = (e) => {
     const selectedProgress = e.nativeEvent.offsetX
     const progressRatio = selectedProgress / e.target.parentNode.offsetWidth
@@ -203,18 +224,54 @@ const Client = () => {
     setProgressBarWidth(`${Math.round(progressRatio * 100)}%`)
   }
 
-  // API helpers
+  // Song Menu Events
+  const selectSongMenuEntry = (event) => {
+    const songId = event.currentTarget.getAttribute('data-songid')
+    const song = getSongById(songId)[0]
+    setSelectedSongMenuEntry(song)
+  }
+
+  const playSelectedSongMenuEntry = (event) => {
+    const songId = event.target.getAttribute('data-songid')
+    const song = getSongById(songId)[0]
+    setSelectedSong(song)
+    loadSong(song)
+  }
+
+  //
+  // Helpers
+  //
+  const getSongById = (songId) => {
+    return songQueue.filter((song) => song.id === songId)
+  }
+
+  // API
   const callApiForDefaultAlbumData = () => {
     return albums[0]
+  }
+
+  // get timestamp for progressbar
+  const getTimestamp = (time) => {
+    let minutes = Math.floor(time / 60)
+    let seconds = Math.floor(time % 60)
+    if (minutes < 10) {
+      minutes = `0${minutes}`
+    }
+    if (seconds < 10) {
+      seconds = `0${seconds}`
+    }
+    return `${minutes}:${seconds}`
   }
 
   useEffect(() => {
     const selectedAlbum = callApiForDefaultAlbumData()
     const selectedSong = selectedAlbum.songs[0]
+    const selectedSongMenuEntry = selectedAlbum.songs[0]
     const selectedAlbumSongs = selectedAlbum.songs
 
     setSelectedAlbum(selectedAlbum)
     setSelectedSong(selectedSong)
+    setSelectedSongMenuEntry(selectedSongMenuEntry)
     setSelectedAlbumSongs(selectedAlbumSongs)
     setSongQueue(selectedAlbumSongs)
 
@@ -277,9 +334,9 @@ const Client = () => {
 
       {/* radio */}
       <div id='music-wrapper' className='section'>
-        <h2>Taz Radio</h2>
+        <h2 style={{ opacity: '.5' }}>Taz Radio</h2>
         {/* Marquee */}
-        <marquee behavior='scroll' direction='left' className='radio-marquee'>
+        {/* <marquee behavior='scroll' direction='left' className='radio-marquee'>
           <span>
             {selectedSong.track}. &quot;{selectedSong.name}&quot;{' '}
           </span>
@@ -287,7 +344,7 @@ const Client = () => {
             &ndash;&nbsp;{selectedSong.album} (Taz Marvin Music,{' '}
             {selectedSong.released})
           </span>
-        </marquee>
+        </marquee> */}
 
         <div id='radio'>
           {/* Player */}
@@ -392,11 +449,21 @@ const Client = () => {
                 <div
                   key={song.id}
                   className={`entry ${
-                    song.id === selectedSong.id && 'entry-is-selected'
+                    song.id === selectedSongMenuEntry.id && 'entry-is-selected'
                   }`}
+                  data-songid={song.id}
+                  onClick={selectSongMenuEntry}
                 >
                   <div className='song'>
-                    <i className='fas fa-play' title='Play'></i>
+                    <span className='track-wrapper'>
+                      <span className='song-track'>{song.track}</span>
+                      <i
+                        className='fas fa-play'
+                        title='Play'
+                        data-songid={song.id}
+                        onClick={playSelectedSongMenuEntry}
+                      ></i>
+                    </span>
                     <span className='song-name'>{song.name}</span>
                   </div>
                   <span className='details'>

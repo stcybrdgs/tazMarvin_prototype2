@@ -197,7 +197,7 @@
         padding: 20px;
         display: flex;
         flex-direction: column;
-        background: #798aa1;
+        background: #98a6b9; //#798aa1;
         border-top: 1px solid white;
         border-left: 1px solid white;
         border-bottom: 1px solid black;
@@ -225,6 +225,7 @@
           // border: 1px solid red;
           padding: 4px 0px;
           text-align: center;
+          color: floralwhite;
           //white-space: nowrap;
 
           .album-info-song {
@@ -249,6 +250,7 @@
           // border: 1px solid white;
           padding: 40px 0 12px 0;
           text-align: center;
+          color: floralwhite;
 
           .progress-bar {
             background: #444443;
@@ -296,7 +298,7 @@
 
             i {
               font-size: 1.2em;
-              opacity: 0.5;
+              opacity: 0.6;
             }
 
             i:hover {
@@ -383,21 +385,21 @@
       // }
 
       .radio-menu {
-        border-top: 1px solid whitesmoke;
+        border-top: 1px solid #62787e;
         text-align: left;
-        color: whitesmoke;
+        color: floralwhite;
         width: 50%;
         min-width: 360px;
 
         .entry-is-selected {
-          background: #69778a;
+          background: #6f8285; //#69778a;
         }
 
         .entry {
           padding: 8px 20px;
           display: flex;
           justify-content: space-between;
-          border-bottom: 1px solid whitesmoke;
+          border-bottom: 1px solid #62787e;
           font-size: 0.9em;
 
           .song {
@@ -405,21 +407,29 @@
             white-space: nowrap;
             text-overflow: ellipsis;
 
-            .fa-play {
-              position: relative;
-              top: 0;
-              opacity: 0.7;
-            }
+            .track-wrapper {
+              // rem: this wrapper allows toggling of play button
+              // without breaking layout
+              display: inline-block;
+              width: 24px;
 
-            .fa-play:hover {
-              cursor: pointer;
-              opacity: 1;
-              color: white;
-              text-shadow: 1px 0px 4px #fff;
-            }
+              .fa-play {
+                position: relative;
+                top: 0;
+                opacity: 0.7;
+                display: none;
+              }
 
-            .fa-play:active {
-              opacity: 0.7;
+              .fa-play:hover {
+                cursor: pointer;
+                opacity: 1;
+                color: white;
+                text-shadow: 1px 0px 4px #fff;
+              }
+
+              .fa-play:active {
+                opacity: 0.7;
+              }
             }
 
             .song-name {
@@ -441,6 +451,7 @@
               top: 1px;
               border-radius: 20px;
               opacity: 0.6;
+
               background: transparent;
               transition: background 0.1s;
             }
@@ -459,8 +470,22 @@
         }
 
         .entry:hover {
-          background: #69778a;
+          background: #62707a8a; //#69778a;
           cursor: default;
+
+          .track-wrapper {
+            .song-track {
+              display: none;
+            }
+
+            .fa-play {
+              display: inline;
+            }
+          }
+        }
+
+        .entry.entry-is-selected:hover {
+          background: #6f8285;
         }
       }
       // }
