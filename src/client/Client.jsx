@@ -132,7 +132,9 @@ const Client = () => {
   }
 
   const prevSong = () => {
-    const currentIndex = selectedSong.track - 1
+    const currentIndex = songQueue.findIndex(
+      (song) => song.id === selectedSong.id
+    )
     const prevIndex =
       currentIndex === 0 ? songQueue.length - 1 : currentIndex - 1
     const prevSong = songQueue[prevIndex]
@@ -142,7 +144,9 @@ const Client = () => {
   }
 
   const nextSong = () => {
-    const currentIndex = selectedSong.track - 1
+    const currentIndex = songQueue.findIndex(
+      (song) => song.id === selectedSong.id
+    )
     const nextIndex =
       currentIndex === songQueue.length - 1 ? 0 : currentIndex + 1
     const nextSong = songQueue[nextIndex]
