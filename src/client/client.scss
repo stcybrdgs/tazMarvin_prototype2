@@ -156,7 +156,6 @@
     .radio-marquee {
       font-family: 'IBM Plex Mono', monospace, sans-serif;
       font-size: 1.1em;
-      //font-weight: 600;
       color: white;
       display: block;
       position: relative;
@@ -165,14 +164,10 @@
           rgba(110, 112, 110, 0.7) 0.1em,
           transparent 0.1em
         ),
-        linear-gradient(
-          90deg,
-          rgba(140, 244, 140, 0.4) 0.1em,
-          transparent 0.1em
-        );
+        linear-gradient(90deg, rgb(134 224 212 / 40%) 0.1em, transparent 0.1em);
       background-size: 0.3em 0.3em;
       border-bottom: 1px solid #3a3a3a;
-      border-top: 1px solid #a7d076;
+      // border-top: 1px solid #c9cdd2;
       box-shadow: 0px 3px 12px 0px rgba(0, 0, 0, 0.3);
     }
 
@@ -193,7 +188,7 @@
         //border: 1px solid whitesmoke; // orange;
         border-radius: 15px;
         width: 400px;
-        min-width: 360px;
+        min-width: 320px;
         padding: 20px;
         display: flex;
         flex-direction: column;
@@ -214,8 +209,8 @@
             border-top: 1px solid black;
             border-left: 1px solid black;
             border-radius: 15px;
-            height: 300px;
-            width: 300px;
+            width: 100%;
+            height: auto;
             object-fit: cover;
             box-shadow: 8px 8px 16px 0px rgba(255, 255, 255, 0.3); /* h v blur spread */
           }
@@ -250,10 +245,10 @@
           // border: 1px solid white;
           padding: 40px 0 12px 0;
           text-align: center;
-          color: floralwhite;
+          color: white; //floralwhite;
 
           .progress-bar {
-            background: #444443;
+            background: #c3c3c3; //#444443;
             border-bottom: 1px solid white;
             border-radius: 5px;
             cursor: pointer;
@@ -261,7 +256,7 @@
             width: 100%;
 
             .progress {
-              background: #6ac5c8;
+              background: #7afbff; //#6ac5c8;
               border-radius: 5px;
               height: 100%;
               width: 0%;
@@ -375,10 +370,87 @@
           }
 
           .volume-slider {
-            color: blue;
+            // outline: none;
+            // border: none;
+            //color: blue;
             font-size: 0.9em;
             position: relative;
             top: 6px;
+            left: -8px;
+
+            .mute-btn {
+              //border: 1px solid white;
+              width: 40px;
+              border-radius: 20px;
+              font-size: 1.1em;
+              margin-right: 2px;
+              padding-left: 6px;
+              color: white;
+              opacity: 0.6;
+            }
+
+            .mute-btn:hover {
+              cursor: pointer;
+              opacity: 1;
+              text-shadow: 0 0 2px #fff;
+            }
+
+            .mute-btn:active {
+              opacity: 0.6;
+            }
+
+            /* VOLUME SLIDER*/
+
+            // override range input in all browsers
+            input[type='range'] {
+              -webkit-appearance: none;
+              width: 50%;
+              background: transparent;
+            }
+
+            // slider knob
+            input[type='range']::-webkit-slider-thumb {
+              -webkit-appearance: none;
+              height: 24px;
+              width: 24px;
+              border-radius: 20px;
+              cursor: pointer;
+              background: #d1d9e0;
+              position: relative;
+              top: -9px;
+            }
+
+            input[type='range']::-webkit-slider-thumb:hover {
+              border: 2px solid #7afbff;
+              background: white;
+            }
+
+            input[type='range']::-moz-range-thumb {
+            }
+            input[type='range']::-ms-thumb {
+            }
+
+            // slider track
+            input[type='range']::-webkit-slider-runnable-track {
+              height: 6px;
+              background: #d1d9e0;
+              border-radius: 5px;
+            }
+
+            input[type='range']:active::-webkit-slider-runnable-track {
+              background: white;
+            }
+
+            input[type='range']::-moz-range-track {
+              background: red;
+            }
+
+            input[type='range']::-ms-track {
+            }
+          }
+
+          .volume-slider:focus {
+            outline: none;
           }
         }
       }
@@ -396,7 +468,7 @@
         }
 
         .entry {
-          padding: 8px 20px;
+          padding: 10px 20px;
           display: flex;
           justify-content: space-between;
           border-bottom: 1px solid #62787e;

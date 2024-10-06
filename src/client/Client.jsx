@@ -1,9 +1,11 @@
 /* eslint-disable react/no-unknown-property */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState, useRef } from 'react'
+// import React, { Component } from 'react'
 // import { CSSTransition } from 'react-transition-group'
 import './client.scss'
 import albums from '../data/albums.js'
+import VolumeSlider from '../components/VolumeSlider.jsx'
 
 // import { useRenderCount } from "@uidotdev/usehooks";
 // const renderCount = useRenderCount();
@@ -40,7 +42,7 @@ const Client = () => {
   const [selectedSong, setSelectedSong] = useState({})
   const [selectedSongMenuEntry, setSelectedSongMenuEntry] = useState({})
   const [isPlaying, setIsPlaying] = useState(false)
-  const [currentIndex, setCurrentIndex] = useState(0)
+  //const [currentIndex, setCurrentIndex] = useState(0)
   const [selectedAlbum, setSelectedAlbum] = useState({})
   const [selectedAlbumSongs, setSelectedAlbumSongs] = useState([])
   const [songQueue, setSongQueue] = useState([])
@@ -49,7 +51,9 @@ const Client = () => {
   const [duration, setDuration] = useState(0)
   const [isRepeated, setIsRepeated] = useState(false)
   const [progressBarWidth, setProgressBarWidth] = useState('0%')
-  const [entryIsHovered, setEntryIsHovered] = useState('')
+  // const [entryIsHovered, setEntryIsHovered] = useState('')
+  const [audioVolume, setAudioVolume] = useState(0)
+  // const [audioMuted, setAudioMuted] = useState(false)
 
   const playerStyles = {
     progressBar: { width: progressBarWidth },
@@ -113,18 +117,15 @@ const Client = () => {
 
   const handleAudioEnded = () => {
     console.log('audio ended')
-
-    // if the next song is at the top of the queue,
-    // then do not continue playing unless
-    // the user enabled the repeat option
-    if (currentIndex === songQueue.length - 1 && !isRepeated) {
-      return
-    }
     nextSong()
   }
 
   const handleAudioLoadedData = () => {
     console.log('loaded data')
+    // const currentIndex = songQueue.findIndex(
+    //   (song) => song.id === selectedSong.id
+    // )
+
     if (isPlaying) {
       playSong()
     }
@@ -146,9 +147,7 @@ const Client = () => {
   }
 
   const prevSong = () => {
-    const currentIndex = songQueue.findIndex(
-      (song) => song.id === selectedSong.id
-    )
+    const currentIndex = currentSongIndex()
     const prevIndex =
       currentIndex === 0 ? songQueue.length - 1 : currentIndex - 1
     const prevSong = songQueue[prevIndex]
@@ -159,10 +158,16 @@ const Client = () => {
   }
 
   const nextSong = () => {
-    const currentIndex = songQueue.findIndex(
-      (song) => song.id === selectedSong.id
-    )
+    console.log(`next, currentIndex: ${currentSongIndex()}`)
+    // at the end of the song queue, stop playing
+    // unless user enabled repeat option
+    if (currentSongIndex() === songQueue.length - 1 && !isRepeated) {
+      console.log('do not repeat')
+      resetCurrentSong()
+      return
+    }
 
+    const currentIndex = currentSongIndex()
     const nextIndex =
       currentIndex === songQueue.length - 1 ? 0 : currentIndex + 1
     const nextSong = songQueue[nextIndex]
@@ -172,6 +177,7 @@ const Client = () => {
     loadSong(nextSong)
 
     if (isPlaying) {
+      console.log('next -> playSong')
       playSong()
     }
   }
@@ -224,6 +230,21 @@ const Client = () => {
     setProgressBarWidth(`${Math.round(progressRatio * 100)}%`)
   }
 
+  const handleAudioVolumeChange = (audioVolume) => {
+    console.log('parent volume: ', audioVolume)
+    setAudioVolume(audioVolume)
+    audioRef.current.volume = audioVolume
+  }
+
+  // const handleAudioMutedChange = (audioMuted) => {
+  //   if (audioMuted) {
+  //     //audioRef.current.volume = 0
+  //     setAudioVolume(0)
+
+  //   }
+  //   setAudioMuted(audioMuted)
+  // }
+
   // Song Menu Events
   const selectSongMenuEntry = (event) => {
     const songId = event.currentTarget.getAttribute('data-songid')
@@ -236,6 +257,7 @@ const Client = () => {
     const song = getSongById(songId)[0]
     setSelectedSong(song)
     loadSong(song)
+    playSong(song)
   }
 
   //
@@ -243,6 +265,16 @@ const Client = () => {
   //
   const getSongById = (songId) => {
     return songQueue.filter((song) => song.id === songId)
+  }
+
+  const resetCurrentSong = () => {
+    setProgressBarWidth('0%')
+    setCurrentTime(getTimestamp(0))
+    pauseSong()
+  }
+
+  const currentSongIndex = () => {
+    return songQueue.findIndex((song) => song.id === selectedSong.id)
   }
 
   // API
@@ -277,6 +309,7 @@ const Client = () => {
 
     if (audioRef.current) {
       loadSong(selectedSong.fileUrl)
+      audioRef.current.volume = audioVolume
     }
   }, [])
 
@@ -336,15 +369,16 @@ const Client = () => {
       <div id='music-wrapper' className='section'>
         <h2 style={{ opacity: '.5' }}>Taz Radio</h2>
         {/* Marquee */}
-        {/* <marquee behavior='scroll' direction='left' className='radio-marquee'>
+        <marquee behavior='scroll' direction='left' className='radio-marquee'>
           <span>
             {selectedSong.track}. &quot;{selectedSong.name}&quot;{' '}
           </span>
           <span>
-            &ndash;&nbsp;{selectedSong.album} (Taz Marvin Music,{' '}
-            {selectedSong.released})
+            &ndash;&nbsp;{selectedSong.album}
+            {/* (Taz Marvin Music,{' '}
+            {selectedSong.released}) */}
           </span>
-        </marquee> */}
+        </marquee>
 
         <div id='radio'>
           {/* Player */}
@@ -394,7 +428,7 @@ const Client = () => {
                   title='Shuffle songs'
                   onClick={toggleShuffleSongs}
                   style={playerStyles.shuffleBtn}
-                ></i>
+                />
 
                 <div className='main-control-buttons'>
                   <i
@@ -402,7 +436,7 @@ const Client = () => {
                     id='prev'
                     title='Previous'
                     onClick={prevSong}
-                  ></i>
+                  />
                   <div
                     className='play-button-wrapper'
                     onClick={isPlaying ? pauseSong : playSong}
@@ -413,21 +447,21 @@ const Client = () => {
                       title='Play'
                       onClick={playSong}
                       style={playerStyles.playBtn}
-                    ></i>
+                    />
                     <i
                       className='fas fa-pause'
                       id='pause'
                       title='Pause'
                       onClick={pauseSong}
                       style={playerStyles.pauseBtn}
-                    ></i>
+                    />
                   </div>
                   <i
                     className='fas fa-forward'
                     id='next'
                     title='Next'
                     onClick={nextSong}
-                  ></i>
+                  />
                 </div>
                 <i
                   className='fa-solid fa-repeat'
@@ -435,10 +469,11 @@ const Client = () => {
                   title='Repeat songs'
                   onClick={repeatSong}
                   style={playerStyles.repeatBtn}
-                ></i>
+                />
               </div>
 
-              <div className='volume-slider'>volume -----------</div>
+              {/* Volume Slider */}
+              <VolumeSlider onVolumeChange={handleAudioVolumeChange} />
             </div>
           </div>
 
@@ -462,13 +497,13 @@ const Client = () => {
                         title='Play'
                         data-songid={song.id}
                         onClick={playSelectedSongMenuEntry}
-                      ></i>
+                      />
                     </span>
                     <span className='song-name'>{song.name}</span>
                   </div>
                   <span className='details'>
                     <span className='song-length'>{song.duration}</span>
-                    <i className='fa-solid fa-ellipsis song-menu'></i>
+                    <i className='fa-solid fa-ellipsis song-menu' />
                   </span>
                 </div>
               )
@@ -543,7 +578,7 @@ const Client = () => {
           {footerSocialIcons.map((name, index) => {
             return (
               <div className='fa-brands-wrapper' key={`${name}-${index}`}>
-                <i className={`fa-brands ${name}`}></i>
+                <i className={`fa-brands ${name}`} />
               </div>
             )
           })}

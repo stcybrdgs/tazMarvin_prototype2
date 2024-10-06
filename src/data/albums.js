@@ -7,7 +7,7 @@ const albums = [
     duration: '2:25:01',
     released: '2001',
     genre: 'Education',
-    artUrl: 'src/assets/chin_2.jpeg',
+    artUrl: 'src/assets/reach.jpg',
     songs: [
       {
         id: 'a0-s0',
@@ -22,12 +22,12 @@ const albums = [
       {
         id: 'a0-s2',
         track: 2,
-        album: 'Ling Lang plays the blues',
-        name: 'Piano Song 2112',
+        album: 'The First White Book',
+        name: 'Part 1',
         artist: '王朋和李友',
-        duration: '00:19',
+        duration: '36:16',
         released: '2001',
-        fileUrl: 'src/assets/piano1.mp3',
+        fileUrl: 'src/assets/chin_0.mp3',
       },
       {
         id: 'a0-s3',
