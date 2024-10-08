@@ -40,7 +40,7 @@ Lorem ipsum odor amet, consectetuer adipiscing elit. Euismod suspendisse arcu ph
 // State variables
 const Client = () => {
   const [selectedSong, setSelectedSong] = useState({})
-  const [selectedSongMenuEntry, setSelectedSongMenuEntry] = useState({})
+  const [selectedRadioMenuEntry, setSelectedRadioMenuEntry] = useState({})
   const [isPlaying, setIsPlaying] = useState(false)
   //const [currentIndex, setCurrentIndex] = useState(0)
   const [selectedAlbum, setSelectedAlbum] = useState({})
@@ -68,6 +68,13 @@ const Client = () => {
       textShadow: isRepeated ? '0px 0px 10px #fff' : 'none',
     },
   }
+
+  // const radioMenuStyles = {
+  //   playButton: {},
+  //   pauseButton: {
+  //     display: `${isPlaying && selectedSong.id === song.id ? 'inline' :'none'}`
+  //   },
+  // }
 
   const audioRef = useRef(null)
   //const songProgressRef = useRef()
@@ -161,7 +168,7 @@ const Client = () => {
     const prevSong = songQueue[prevIndex]
 
     setSelectedSong(prevSong)
-    setSelectedSongMenuEntry(prevSong)
+    setSelectedRadioMenuEntry(prevSong)
     loadSong(prevSong)
   }
 
@@ -174,7 +181,7 @@ const Client = () => {
     const nextSong = songQueue[nextIndex]
 
     setSelectedSong(nextSong)
-    setSelectedSongMenuEntry(nextSong)
+    setSelectedRadioMenuEntry(nextSong)
     loadSong(nextSong)
 
     if (isPlaying) {
@@ -247,13 +254,13 @@ const Client = () => {
   // }
 
   // Song Menu Events
-  const selectSongMenuEntry = (event) => {
+  const selectRadioMenuEntry = (event) => {
     const songId = event.currentTarget.getAttribute('data-songid')
     const song = getSongById(songId)[0]
-    setSelectedSongMenuEntry(song)
+    setSelectedRadioMenuEntry(song)
   }
 
-  const playSelectedSongMenuEntry = (event) => {
+  const playSelectedRadioMenuEntry = (event) => {
     const songId = event.target.getAttribute('data-songid')
     const song = getSongById(songId)[0]
     setSelectedSong(song)
@@ -261,8 +268,8 @@ const Client = () => {
     playSong(song)
   }
 
-  const pauseSelectedSongMenuEntry = () => {
-    console.log('pause selected')
+  const pauseSelectedRadioMenuEntry = () => {
+    pauseSong()
   }
   //
   // Helpers
@@ -302,12 +309,12 @@ const Client = () => {
   useEffect(() => {
     const selectedAlbum = callApiForDefaultAlbumData()
     const selectedSong = selectedAlbum.songs[0]
-    const selectedSongMenuEntry = selectedAlbum.songs[0]
+    const selectedRadioMenuEntry = selectedAlbum.songs[0]
     const selectedAlbumSongs = selectedAlbum.songs
 
     setSelectedAlbum(selectedAlbum)
     setSelectedSong(selectedSong)
-    setSelectedSongMenuEntry(selectedSongMenuEntry)
+    setSelectedRadioMenuEntry(selectedRadioMenuEntry)
     setSelectedAlbumSongs(selectedAlbumSongs)
     setSongQueue(selectedAlbumSongs)
 
@@ -488,26 +495,48 @@ const Client = () => {
                 <div
                   key={song.id}
                   className={`entry ${
-                    song.id === selectedSongMenuEntry.id && 'entry-is-selected'
+                    song.id === selectedRadioMenuEntry.id && 'entry-is-selected'
                   }`}
                   data-songid={song.id}
-                  onClick={selectSongMenuEntry}
+                  onClick={selectRadioMenuEntry}
                 >
                   <div className='song'>
                     <span className='track-wrapper'>
                       <span className='song-track'>{song.track}</span>
-                      <i
-                        className='fas fa-play'
-                        title='Play'
-                        data-songid={song.id}
-                        onClick={playSelectedSongMenuEntry}
-                      />
+                      <div className='fas-icons'>
+                        <i
+                          className='fas fa-play fas-icon'
+                          title='Play'
+                          data-songid={song.id}
+                          onClick={playSelectedRadioMenuEntry}
+                          style={{
+                            display: `${
+                              isPlaying && selectedSong.id === song.id
+                                ? 'none'
+                                : 'inline'
+                            }`,
+                          }}
+                        />
+                        <i
+                          className='fas fa-pause fas-icon'
+                          title='Pause'
+                          data-songid={song.id}
+                          onClick={pauseSelectedRadioMenuEntry}
+                          style={{
+                            display: `${
+                              isPlaying && selectedSong.id === song.id
+                                ? 'inline'
+                                : 'none'
+                            }`,
+                          }}
+                        />
+                      </div>
                       {/* 
                       <i
                         className='fas fa-play'
                         title='Play'
                         data-songid={song.id}
-                        onClick={playSelectedSongMenuEntry}
+                        onClick={playSelectedRadioMenuEntry}
                         style={{ display: `${isPlaying ? 'none' : 'inline'}` }}
                       />
                       */}
@@ -515,7 +544,7 @@ const Client = () => {
                         className='fas fa-pause'
                         title='Pause'
                         data-songid={song.id}
-                        onClick={pauseSelectedSongMenuEntry}
+                        onClick={pauseSelectedRadioMenuEntry}
                       /> */}
                     </span>
                     <span className='song-name'>{song.name}</span>

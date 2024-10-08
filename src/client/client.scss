@@ -490,23 +490,23 @@
               width: 24px;
 
               /* //* TO-DO: this approach is confusing; find better solution  */
-              // rem: .fa-play is the class used for the play icon
-              // in each song-menu entry; it is shown/hidden by .entry:hover
-              .fa-play {
+              // rem: .fas-icons is the div wrapping the play/pause icons in each
+              // song-menu entry; it is shown/hidden by .entry:hover
+              .fas-icons {
                 position: relative;
                 top: 0;
                 opacity: 0.7;
                 display: none;
               }
 
-              .fa-play:hover {
+              .fas-icons:hover {
                 cursor: pointer;
                 opacity: 1;
                 color: white;
                 text-shadow: 1px 0px 4px #fff;
               }
 
-              .fa-play:active {
+              .fas-icons:active {
                 opacity: 0.7;
               }
             }
@@ -557,7 +557,7 @@
               display: none;
             }
 
-            .fa-play {
+            .fas-icons {
               display: inline;
             }
           }
