@@ -250,6 +250,7 @@
           .progress-bar {
             background: #c3c3c3; //#444443;
             border-bottom: 1px solid white;
+            border-top: 1px solid rgb(172, 172, 172);
             border-radius: 5px;
             cursor: pointer;
             height: 10px;
@@ -421,8 +422,8 @@
             }
 
             input[type='range']::-webkit-slider-thumb:hover {
-              border: 2px solid #7afbff;
-              background: white;
+              //border: 2px solid #7afbff;
+              background: rgb(255, 255, 255);
             }
 
             input[type='range']::-moz-range-thumb {
@@ -433,8 +434,11 @@
             // slider track
             input[type='range']::-webkit-slider-runnable-track {
               height: 6px;
-              background: #d1d9e0;
+              background: #c3c3c3; //#d1d9e0;
               border-radius: 5px;
+              border-bottom: 1px solid white;
+              //border-top: 1px solid transparent;
+              border-top: 1px solid rgb(172, 172, 172);
             }
 
             input[type='range']:active::-webkit-slider-runnable-track {
@@ -485,6 +489,9 @@
               display: inline-block;
               width: 24px;
 
+              /* //* TO-DO: this approach is confusing; find better solution  */
+              // rem: .fa-play is the class used for the play icon
+              // in each song-menu entry; it is shown/hidden by .entry:hover
               .fa-play {
                 position: relative;
                 top: 0;
@@ -521,7 +528,7 @@
               padding: 6px 7px 4px 7px;
               position: relative;
               top: 1px;
-              border-radius: 20px;
+              border-radius: 30px;
               opacity: 0.6;
 
               background: transparent;

@@ -116,7 +116,15 @@ const Client = () => {
   }
 
   const handleAudioEnded = () => {
-    console.log('audio ended')
+    const endOfSongQueue = currentSongIndex() === songQueue.length - 1
+
+    // if end of song queue and !isRepeat, stop playing
+    if (endOfSongQueue && !isRepeated) {
+      console.log('do not repeat')
+      resetCurrentSong()
+      return
+    }
+
     nextSong()
   }
 
@@ -158,14 +166,7 @@ const Client = () => {
   }
 
   const nextSong = () => {
-    console.log(`next, currentIndex: ${currentSongIndex()}`)
-    // at the end of the song queue, stop playing
-    // unless user enabled repeat option
-    if (currentSongIndex() === songQueue.length - 1 && !isRepeated) {
-      console.log('do not repeat')
-      resetCurrentSong()
-      return
-    }
+    //console.log(`next, currentIndex: ${currentSongIndex()}`)
 
     const currentIndex = currentSongIndex()
     const nextIndex =
@@ -260,6 +261,9 @@ const Client = () => {
     playSong(song)
   }
 
+  const pauseSelectedSongMenuEntry = () => {
+    console.log('pause selected')
+  }
   //
   // Helpers
   //
@@ -479,7 +483,7 @@ const Client = () => {
 
           {/* Radio Menu */}
           <div className='radio-menu'>
-            {songQueue.map((song) => {
+            {selectedAlbumSongs.map((song) => {
               return (
                 <div
                   key={song.id}
@@ -498,6 +502,21 @@ const Client = () => {
                         data-songid={song.id}
                         onClick={playSelectedSongMenuEntry}
                       />
+                      {/* 
+                      <i
+                        className='fas fa-play'
+                        title='Play'
+                        data-songid={song.id}
+                        onClick={playSelectedSongMenuEntry}
+                        style={{ display: `${isPlaying ? 'none' : 'inline'}` }}
+                      />
+                      */}
+                      {/* <i
+                        className='fas fa-pause'
+                        title='Pause'
+                        data-songid={song.id}
+                        onClick={pauseSelectedSongMenuEntry}
+                      /> */}
                     </span>
                     <span className='song-name'>{song.name}</span>
                   </div>
@@ -513,7 +532,9 @@ const Client = () => {
 
         {/* Album Carousel */}
         <div id='carousel-wrapper' className='section'>
-          <div className='carousel'>Album Carousel</div>
+          <div className='carousel'>
+            <h2>Album Carousel</h2>
+          </div>
         </div>
       </div>
 
