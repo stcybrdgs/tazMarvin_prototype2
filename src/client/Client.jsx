@@ -6,6 +6,7 @@ import { useEffect, useState, useRef } from 'react'
 import './client.scss'
 import albums from '../data/albums.js'
 import VolumeSlider from '../components/VolumeSlider.jsx'
+import AnimatedEq from '../components/AnimatedEQ.jsx'
 
 // import { useRenderCount } from "@uidotdev/usehooks";
 // const renderCount = useRenderCount();
@@ -502,7 +503,28 @@ const Client = () => {
                 >
                   <div className='song'>
                     <span className='track-wrapper'>
-                      <span className='song-track'>{song.track}</span>
+                      <span className='song-track'>
+                        <span
+                          style={{
+                            display: `${
+                              isPlaying && selectedSong.id === song.id
+                                ? 'none'
+                                : 'inline'
+                            }`,
+                          }}
+                        >
+                          {song.track}
+                        </span>
+                        <AnimatedEq
+                          style={{
+                            display: `${
+                              isPlaying && selectedSong.id === song.id
+                                ? 'inline'
+                                : 'none'
+                            }`,
+                          }}
+                        />
+                      </span>
                       <div className='fas-icons'>
                         <i
                           className='fas fa-play fas-icon'
@@ -563,6 +585,7 @@ const Client = () => {
         <div id='carousel-wrapper' className='section'>
           <div className='carousel'>
             <h2>Album Carousel</h2>
+            <AnimatedEq />
           </div>
         </div>
       </div>
